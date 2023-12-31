@@ -1,0 +1,8 @@
+# dir
+/node_modules
+
+# files
+*.txt
+package.json
+package-lock.json
+.eslintrc.js
