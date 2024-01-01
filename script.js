@@ -12,35 +12,40 @@
 (function () {
     'use strict';
 
-    // let sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    let sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
     console.log("AutoRemark start!");
+    main();
 
-    // await sleep(1000);
-    // setTimeout(function () {
-    if (window.location.href.indexOf("https://ugsqs.whu.edu.cn/studentpj") != -1 ||
-        window.location.href.indexOf("https://ugsqs.whu.edu.cn/new/student/index.jsp") != -1) {
-        // 主页
-        let data = $("#task-list").children().data('data');
-        let overtime = "timeNO"; // 是否超时
-        let contextPath = "";
-        let backUrl = contextPath + '/new/student/rank/evaluate2.jsp?hdfaid=' + data.ID + '&overtime=' + overtime + '&sfkdcpj=' + data.SFKDCPJ + '&sfqxzdf=' + data.SFQXZDF + '&zbtx=' + data.ZBTX + '&kkxy=' + data.ORGCODE + '&roid=' + data.ROID;
-        window.location.href = backUrl; // 跳转到评教页
-        console.log("AutoRemark: 跳转到评教页");
+    async function main() {
+        await sleep(1000);
+        // setTimeout(function () {
+        if (window.location.href.indexOf("https://ugsqs.whu.edu.cn/studentpj") != -1 ||
+            window.location.href.indexOf("https://ugsqs.whu.edu.cn/new/student/index.jsp") != -1) {
+            // 主页
+            let data = $("#task-list").children().data('data');
+            let overtime = "timeNO"; // 是否超时
+            let contextPath = "";
+            let backUrl = contextPath + '/new/student/rank/evaluate2.jsp?hdfaid=' + data.ID + '&overtime=' + overtime + '&sfkdcpj=' + data.SFKDCPJ + '&sfqxzdf=' + data.SFQXZDF + '&zbtx=' + data.ZBTX + '&kkxy=' + data.ORGCODE + '&roid=' + data.ROID;
+            window.location.href = backUrl; // 跳转到评教页
+            console.log("AutoRemark: 跳转到评教页");
+        }
+
+        // 课程列表页
+        let totalPage = $("table.table.table-bordered.table-striped").dataTable().fnPagingInfo().iTotalPages; // 总页数
+        console.log("AutoRemark: 总页数: " + totalPage);
+        for (let i = 0; i < totalPage; i++) {
+            await sleep(1000);
+            let pagination = $(".dataTables_paginate.paging_bootstrap.pagination").children().children(); // 分页栏
+            pagination.eq(i + 1).click(); // 点击下一页
+            console.log("AutoRemark: 点击第" + (i + 1) + "页");
+            remarkInOnePage();
+        }
+        // }, 500);
     }
 
-    // 课程列表页
-    let totalPage = $("table.table.table-bordered.table-striped").dataTable().fnPagingInfo().iTotalPages; // 总页数
-    console.log("AutoRemark: 总页数: " + totalPage);
-    for (let i = 0; i < totalPage - 1; i++) {
-        let pagination = $(".dataTables_paginate.paging_bootstrap.pagination").children().children(); // 分页栏
-        pagination.eq(i + 1).click(); // 点击下一页
-        console.log("AutoRemark: 点击第" + (i + 1) + "页");
-        remarkInOnePage();
-    }
-    // }, 500);
-
-    function remarkInOnePage() {
+    async function remarkInOnePage() {
         console.log("AutoRemark: remarkInOnePage");
+        await sleep(1000);
         // setTimeout(function () {
         // 获取待评教课程的列表
         let courseList = $("#pjkc").children(); // 课程列表数组
